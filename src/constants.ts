@@ -6,10 +6,13 @@ export const APPROVAL_FUNCTIONS = [
 // 0x represents a contract without code
 export const EMPTY_CODE = "0x";
 
-export const FXT_EXCHANGE = "0x2FAF487A4414Fe77e2327F0bf4AE2a264a776AD2";
+// fxt exchamge https://ftx.com/en
+export const FXT_EXCHANGE = "0x2FAF487A4414Fe77e2327F0bf4AE2a264a776AD2"
+
+const NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 // list of known exchanges EOAs
-export const EXCHANGES_EOA = [FXT_EXCHANGE] 
+export const DISALLOW_ADDRESS_LIST = [FXT_EXCHANGE, NULL_ADDRESS] 
 
 // Max block to watch a suspect since last suspicious call
 export const MAX_BLOCK_TO_TRACK = 1600;

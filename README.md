@@ -1,8 +1,9 @@
-# OpenZeppelin UUPSUpgradeable Agent
+# Evidence of Phishing Agent
 
 ## Description
 
-This agent detects when the UUPSUpgradeable contract is upgraded and then selfdestructed leaving the contract broken and funds locked.
+This agent alert cases of phishing detecting when several EOA (Externally Owned Address) give permisson to a single EOA to use their funds via approve() or increaseAllowance() ERC20 methods. The agent report the attacker, the victim and the stolen token and amount.
+
 
 ## Supported Chains
 
@@ -10,14 +11,22 @@ This agent detects when the UUPSUpgradeable contract is upgraded and then selfde
 
 ## Alerts
 
-- OZ-UPGRADE-SELFDESTRUCT-1
-  - Fired when the contract is upgraded and selfdestructed. it detects the `Upgraded(address indexed implementation)` event and then checks if the contract was destructed.
-  - Severity is always set to "critical" as then the contract is broken because the upgrade behaviour is part of the contract itself
-  - Type is always set to "Suspicious" as it may be an attacker or could be the owner destrying the contract.
+- EVIDENCE-OF-PHISHING-1
+  - Fired when there are 10 `approve` or `increaseAllowance` from different EOA to a single EOA within `1600` blocks since last suspicious activity. EOA addresses that are from known exchanges are excluded.
+  - Severity is always set to "critical" as a phishing operation is in pregress
+  - Type is always set to "Suspicious" as probably is phishing but could exist a real case where many EOA with permissons to a single EOA
   - Metadata
-    - `from` address that initiated the transaction
-    - `contractDestructed` address of the contract destroyed
+    - `affectedAddresses` victim affected address in comma separated format 
+    - `attackerAddress` address of the attacker
+    - `addressesAmount` The token address and amount stolen from the victim in format: `[$token1, $amount1], [$token2, $amount2], ...`
+    - `numberofCalls` Number of suspicious method calls (approve or increaseAllowance) detected
+
+## Test Data
+
+The agent behaviour can be verified with the following:
+- EVIDENCE-OF-PHISHING-1
+  1. forta-agent run --range 13650638..13652198
 
 ## More Documentation
-  - UUPSUpgradeable Vulnerability Post-mortem : https://forum.openzeppelin.com/t/uupsupgradeable-vulnerability-post-mortem/15680
+  - Badger DAO phishing attack: https://rekt.news/badger-rekt/
   

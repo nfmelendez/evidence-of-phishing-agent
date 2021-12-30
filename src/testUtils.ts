@@ -4,7 +4,7 @@ import { BigNumber as EthersBignumber } from '@ethersproject/bignumber';
 export class TestUtils {
 
 
-
+  //crete a transaction mocking the filterFunction
   createTxEvent(block: number, attackerAddress: string = 'attacker') : any {
     const mockTxEvent = {
       filterFunction: jest.fn().mockReturnValue([{
@@ -15,7 +15,9 @@ export class TestUtils {
       }]),
       blockNumber: block,
       from: "victim",
-      to: "tokenAddress"
+      to: "tokenAddress",
+      hash: `hash${block}`,
+      status : true
     } as any;
     return mockTxEvent;
   }

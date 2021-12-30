@@ -9,8 +9,7 @@ import BigNumber from 'bignumber.js';
 
 import { APPROVAL_FUNCTIONS,
   EVIDENCE_OF_PHISHING_1_ALERTID,
-  PROTOCOL,
-  EXCHANGES_EOA
+  PROTOCOL
  } from './constants'
 
 import { AccountUtils } from './AccountUtils';
@@ -24,14 +23,22 @@ function provideHandleTransaction(accountUtils: AccountUtils, suspectWatcher: Su
   return async function handleTransaction(txEvent: TransactionEvent) {
     const findings: Finding[] = []
 
+    //process only successful transaction that did process approve or increaseAllowance methods
+    if (!txEvent.status) {
+      //console.log(`Don't process as thx ${txEvent.hash} is not successful`)
+      return findings;
+    }
+
     const approvalFunctionCalls = txEvent.filterFunction(
       APPROVAL_FUNCTIONS
     );
     for (const aApprovalFunctionCall of approvalFunctionCalls) {
       const possibleAttacker = aApprovalFunctionCall.args.spender as string
       let amount : BigNumber
+      // check if arg addedValue exists is from increaseAllowance
       if(aApprovalFunctionCall.args.addedValue) {
         amount = new BigNumber(aApprovalFunctionCall.args.addedValue.toBigInt())
+      // check if arg amount exists is from approve
       } else if (aApprovalFunctionCall.args.amount) {
         amount = new BigNumber(aApprovalFunctionCall.args.amount.toBigInt())
       } else {
@@ -39,15 +46,17 @@ function provideHandleTransaction(accountUtils: AccountUtils, suspectWatcher: Su
       }
       const possibleVictim = txEvent.from
       const tokenAddress = txEvent.to as string
+      // check if address are EOA and not from a kwnow exchange
       const addressesAreEOA = (
         await Promise.all([
           accountUtils.isEOAandNotExchange(possibleVictim),
           accountUtils.isEOAandNotExchange(possibleAttacker),
         ])
-      ).reduce( (a, b) => a && b)
+      ).reduce( (acc, addressResult) => acc && addressResult)
 
       if (addressesAreEOA) {
-        const suspectDetails = suspectWatcher.processApproveCall(possibleAttacker, possibleVictim, tokenAddress, amount, txEvent.blockNumber)
+        const suspectDetails = suspectWatcher.processApproveCall(possibleAttacker, possibleVictim, tokenAddress, amount, txEvent.blockNumber, txEvent.hash)
+        // we found that actually the suspect is an attacker, create the alert
         if (suspectDetails) {
           findings.push(
             Finding.fromObject({

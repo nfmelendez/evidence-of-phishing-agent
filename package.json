@@ -1,7 +1,7 @@
 {
-  "name": "oz-uupsupgradeable-contract-agent",
+  "name": "evidence-of-phishing-agent",
   "version": "1.0.0",
-  "description": "This agent detects when the UUPSUpgradeable contract is upgraded and then selfdestructed leaving the contract broken and funds locked.",
+  "description": "This agent alert cases of phishing detecting when several EOA (Externally Owned Address) give permisson to a single EOA to use their funds via approve() or increaseAllowance() ERC20 methods. The agent report the attacker, the victim and the stolen token and amount.",
   "scripts": {
     "build": "tsc",
     "start": "npm run start:dev",
@@ -19,7 +19,9 @@
     "test": "jest",
     "mytx": "npm run build && forta-agent run --tx 0x5e4c7966b0eaddaf63f1c89fc1c4c84812905ea79c6bee9d2ada2d2e5afe1f34",
     "myrange": "npm run build && forta-agent run --range 13650638..13652198",
-    "mytx3": "npm run build && forta-agent run --tx 0x5e4c7966b0eaddaf63f1c89fc1c4c84812905ea79c6bee9d2ada2d2e5afe1f34,0x5e4c7966b0eaddaf63f1c89fc1c4c84812905ea79c6bee9d2ada2d2e5afe1f34"
+    "mytx3": "npm run build && forta-agent run --tx 0x5e4c7966b0eaddaf63f1c89fc1c4c84812905ea79c6bee9d2ada2d2e5afe1f34,0x5e4c7966b0eaddaf63f1c89fc1c4c84812905ea79c6bee9d2ada2d2e5afe1f34",
+    "mytxReverted": "npm run build && forta-agent run --tx 0xb86e6b214ff9711fbfd9e60b43d40b323a2d93eee2c0353c4aec5783b6365207"
+
   },
   "dependencies": {
     "bignumber.js": "^9.0.1",
@@ -34,3 +36,4 @@
     "typescript": "^4.3.4"
   }
 }
+

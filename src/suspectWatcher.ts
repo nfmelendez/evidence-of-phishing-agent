@@ -5,6 +5,7 @@ import {
     MAX_CALLS_TO_BE_SUSPICIOUS
    } from './constants'
 
+// The data need to track a suspect
 export class SuspectWatcherDetails {
    public expireBlock: number = 0
    public callCounter: number = 0
@@ -12,6 +13,7 @@ export class SuspectWatcherDetails {
    public tokenAmounts: Map<string, BigNumber> = new Map()
    public attackerAddress: string = ''
 
+   // transforms to string  the token addresses and amounts to the format: `[$token1, $amount1], [$token2, $amount2], ...`
    public toStringTokenAmounts(): string {
     let result = ''
     this.tokenAmounts.forEach((amount: BigNumber, addr: string) => {
@@ -21,6 +23,7 @@ export class SuspectWatcherDetails {
    }
 }
 
+// watch and process calls of the suspects
 export class SuspectWatcher {
 
     private suspectWatcherTable: Map<string, SuspectWatcherDetails>
@@ -29,8 +32,9 @@ export class SuspectWatcher {
       this.suspectWatcherTable = new Map<string, SuspectWatcherDetails>()
     }
 
-    public processApproveCall(possibleAttacker: string, possibleVictim: string, tokenAddress: string,  amount: BigNumber, blockNumber: number) : SuspectWatcherDetails | undefined {
+    public processApproveCall(possibleAttacker: string, possibleVictim: string, tokenAddress: string,  amount: BigNumber, blockNumber: number, thxId:string) : SuspectWatcherDetails | undefined {
 
+      // we refresh and clean up the suspects that after some period didn't have activity
       this.deleteExpired(blockNumber)
 
       let watcherDetails; 
@@ -55,13 +59,14 @@ export class SuspectWatcher {
 
       watcherDetails.attackerAddress = possibleAttacker
 
-      console.log(`call found attacker ${possibleAttacker} and victim ${possibleVictim} nCall: ${watcherDetails.callCounter}`)
+      console.log(`call found attacker ${possibleAttacker} and victim ${possibleVictim} nCall: ${watcherDetails.callCounter} thx ${thxId}`)
 
       if (watcherDetails.callCounter >= MAX_CALLS_TO_BE_SUSPICIOUS) {
           return watcherDetails;
       }
     }
 
+    // Clean up suspect that didn't have activity in a period of time.
     private deleteExpired(blockNumber: number) {
         const entriesToDelete :string[] = []
         this.suspectWatcherTable.forEach((ad: SuspectWatcherDetails, key: string) => {
