@@ -23,9 +23,9 @@ This agent alert cases of phishing detecting when several EOA (Externally Owned 
 
 ## Test Data
 
-The agent behaviour can be verified with the following:
-- EVIDENCE-OF-PHISHING-1
+The agent behaviour can be verified with the following command:
   1. forta-agent run --range 13650638..13652198
+  2. Address `0x1fcdb04d0c5364fbd92c73ca8af9baa72c269107` should be detected as attacker throwing EVIDENCE-OF-PHISHING-1 alert
 
 ## More Documentation
   - Badger DAO phishing attack: https://rekt.news/badger-rekt/
