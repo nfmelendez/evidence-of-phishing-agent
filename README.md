@@ -2,7 +2,7 @@
 
 ## Description
 
-This agent alert cases of phishing detecting when several EOA (Externally Owned Address) give permisson to a single EOA to use their funds via approve() or increaseAllowance() ERC20 methods. The agent report the attacker, the victim and the stolen token and amount.
+This agent alert cases of phishing detecting when several EOA (Externally Owned Address) give permisson to a single EOA to use their funds via approve() or increaseAllowance() ERC20 methods. The agent watch many suspicious activites at the same time and when the suspect match a criteria, it reports the attacker, the victim and the stolen token and amount with a forta alert
 
 
 ## Supported Chains
