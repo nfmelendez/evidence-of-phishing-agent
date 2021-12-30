@@ -12,7 +12,7 @@ This agent alert cases of phishing detecting when several EOA (Externally Owned 
 ## Alerts
 
 - EVIDENCE-OF-PHISHING-1
-  - Fired when there are 10 `approve` or `increaseAllowance` from different EOA to a single EOA within `1600` blocks since last suspicious activity. EOA addresses that are from known exchanges are excluded.
+  - Fired when there are 10 `approve` or `increaseAllowance` ERC20 calls from different EOA to a single EOA within `1600` blocks since last suspicious activity. EOA addresses that are from known exchanges are excluded.
   - Severity is always set to "critical" as a phishing operation is in pregress
   - Type is always set to "Suspicious" as probably is phishing but could exist a real case where many EOA with permissons to a single EOA
   - Metadata
