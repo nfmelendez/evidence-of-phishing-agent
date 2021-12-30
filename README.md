@@ -18,7 +18,7 @@ This agent alert cases of phishing detecting when several EOA (Externally Owned 
   - Metadata
     - `affectedAddresses` victim affected address in comma separated format 
     - `attackerAddress` address of the attacker
-    - `addressesAmount` The token address and amount stolen from the victim in format: `[$token1, $amount1], [$token2, $amount2], ...`
+    - `addressesAmount` The token address and amount stolen from the victim in format: `[$token1, $amount1], [$token2, $amount2],...,[$tokenN, $amountN]`
     - `numberofCalls` Number of suspicious method calls (approve or increaseAllowance) detected
 
 ## Test Data
